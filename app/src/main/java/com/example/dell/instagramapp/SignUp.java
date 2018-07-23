@@ -15,8 +15,8 @@ import com.parse.SignUpCallback;
 
 public class SignUp extends AppCompatActivity {
 Button signup;
-EditText name,pass1,pass2;
-String n,p;
+EditText name,pass1,pass2,email;
+String n,p,p2,mail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,39 +27,50 @@ String n,p;
         name=(EditText)findViewById(R.id.et3);
         pass1=(EditText)findViewById(R.id.et4);
         pass2=(EditText)findViewById(R.id.et5);
+        email=(EditText)findViewById(R.id.em);
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 n=name.getText().toString();
                 p=pass1.getText().toString();
+                p2=pass2.getText().toString();
+                mail=email.getText().toString();
 
-                final ProgressDialog dig=new ProgressDialog(SignUp.this);
-                dig.setTitle("Please wait");
-                dig.setMessage("Signing Up..Please Wait");
-                dig.show();
-                ParseUser user=new ParseUser();
+             if(p.equals(p2)){
+                 final ProgressDialog dig=new ProgressDialog(SignUp.this);
+                 dig.setTitle("Please wait");
+                 dig.setMessage("Signing Up..Please Wait");
+                 dig.show();
+                 ParseUser user=new ParseUser();
 
-                user.setUsername(name.getText().toString());
-                user.setPassword(pass1.getText().toString());
+                 user.setUsername(name.getText().toString());
+                 user.setPassword(pass1.getText().toString());
+                 user.setEmail(email.getText().toString());
 
-                user.signUpInBackground(new SignUpCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        dig.dismiss();
-                        if(e!=null){
-                            Toast.makeText(SignUp.this,e.getMessage(),Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Intent i=new Intent(SignUp.this,DispatchActivity.class);
-                                    startActivity(i);
-                        }
-                    }
-                });
-                Intent i=new Intent(SignUp.this,MainActivity.class);
-                i.putExtra("name",n);
-                i.putExtra("password",p);
-                startActivity(i);
+                 user.signUpInBackground(new SignUpCallback() {
+                     @Override
+                     public void done(ParseException e) {
+                         dig.dismiss();
+                         if(e!=null){
+                             Toast.makeText(SignUp.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                         }
+                         else{
+                             Intent i=new Intent(SignUp.this,DispatchActivity.class);
+                             startActivity(i);
+                         }
+                     }
+                 });
+                 Intent i=new Intent(SignUp.this,MainActivity.class);
+                 i.putExtra("name",n);
+                 i.putExtra("password",p);
+                 startActivity(i);
+             }
+             else{
+                 Toast.makeText(getApplicationContext(),"Passwords donot match,please try again..",Toast.LENGTH_LONG).show();
+             }
+
+
 
             }
         });
